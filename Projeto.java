@@ -9,7 +9,7 @@ import java.util.InputMismatchException;
  * @author Luiz Junio
  * @author Allan Vivekanda
  * @author Breno Soares
- * @author Henrique Fernandes
+ * @author Henrique Fernandes Viana Mendes
  * */
 
 public class Projeto
