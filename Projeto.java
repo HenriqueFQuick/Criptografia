@@ -100,6 +100,7 @@ public class Projeto
             System.out.println("Criptografado com sucesso! ");
         }
         else System.out.println("Não há um arquivo com esse nome!\nCriptografia não foi realizada!");
+        Thread.sleep(1000);
     }
 
     public static void descriptografarArquivo() throws Exception{
@@ -136,6 +137,7 @@ public class Projeto
             System.out.println("Descritografado com sucesso!");
         }
         else System.out.println("Não há um arquivo com esse nome!\nA descriptografia não foi realizada!");
+        Thread.sleep(1000);
     }
 
     public static byte[] cifrar(byte[] b, int chave){
