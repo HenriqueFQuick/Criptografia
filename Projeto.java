@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.io.RandomAccessFile;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.security.SecureRandom;
 import java.util.InputMismatchException;
 
@@ -48,13 +49,17 @@ public class Projeto
                         break;
                 }
             }
-            catch(InputMismatchException ime){
+            catch(InputMismatchException inputMismatchException){
                 System.out.println("\nOops! Parece que digitou algo errado por engano!\nTente novamente!");
                 read.next(); // Limpa buffer do scanner
             }
-            catch(Exception e) {
+            catch(FileNotFoundException fileNotFoundException){
+                System.out.println("\nOops! Não existe arquivo com esse nome!\nTente novamente!");
+                read.next(); // Limpa buffer do scanner 
+            }
+            catch(Exception exception) {
                 System.out.print("Erro: ");
-                e.printStackTrace();
+                exception.printStackTrace();
                 sair = true;
             }
         }
@@ -69,7 +74,7 @@ public class Projeto
         nome = read.nextLine();
         nome = read.nextLine();
         RandomAccessFile raf = new RandomAccessFile(nome, "rw");
-        System.out.println("Digite o que deseja escrever no arquivo:");
+        System.out.println("Digite o que deseja escrever no arquivo:\n");
         String text = read.nextLine();
         byte[] b = text.getBytes();
         raf.read(b);
@@ -90,6 +95,7 @@ public class Projeto
         String name = ""; 
         name = read.nextLine();
         name = read.nextLine();
+<<<<<<< HEAD
         RandomAccessFile raf = new RandomAccessFile(name, "rw");
         int tam = (int)raf.length();
         byte[] b = new byte[tam];
@@ -103,6 +109,26 @@ public class Projeto
         raf.write(b);
         raf.close();
     }//end criptografarArquivo
+=======
+        File file = new File(name);
+        if(file.exists()){
+            RandomAccessFile raf = new RandomAccessFile(file, "rw");
+            int tam = (int)raf.length();
+            byte[] b = new byte[tam];
+            raf.read(b);
+            SecureRandom random = new SecureRandom();
+            int chave = random.nextInt(900000) + 100000;
+            System.out.println("Sua chave de criptografia eh: " + chave);
+            b = cifrar(b, chave);
+            raf.seek(0);
+            raf.writeInt(chave ^ 424242);
+            raf.write(b);
+            raf.close();
+            System.out.println("Criptografado com sucesso! ");
+        }
+        else System.out.println("Não há um arquivo com esse nome!\nCriptografia não foi realizada!");
+    }
+>>>>>>> 21b4475eb8321dd056c09938b8a02c205dc714e7
 
     //metodo para descriptografar arquivo criptografado anteriormente a partir de uma chave informada na hora da cifracao
     public static void descriptografarArquivo() throws Exception{
@@ -110,22 +136,25 @@ public class Projeto
         String name = ""; 
         name = read.nextLine();
         name = read.nextLine();
-        RandomAccessFile raf = new RandomAccessFile(name, "rw");
-        int chave_correta = raf.readInt() ^ 424242;
-        boolean chave_errada = false;
-        int chave = 0;
-        do{
-            chave_errada = false;
-            System.out.print("Qual eh a sua chave de criptografia? ");
-            chave = read.nextInt();
-            if(chave != chave_correta){
-                chave_errada = true;
-                System.out.println("Chave incompativel");
-            }
-        }while(chave_errada);
-        int tam = (int)raf.length()-4;
-        byte[] b = new byte[tam];
+        File file = new File(name);
+        if(file.exists()){
+            RandomAccessFile raf = new RandomAccessFile(file, "rw");
+            int chave_correta = raf.readInt() ^ 424242;
+            boolean chave_errada = false;
+            int chave = 0;
+            do{
+                chave_errada = false;
+                System.out.print("Qual eh a sua chave de criptografia? ");
+                chave = read.nextInt();
+                if(chave != chave_correta){
+                    chave_errada = true;
+                    System.out.println("Chave incompativel");
+                }
+            }while(chave_errada);
+            int tam = (int)raf.length()-4;
+            byte[] b = new byte[tam];
 
+<<<<<<< HEAD
         raf.read(b);
         b = decifrar(b, chave);
         raf.close();
@@ -135,6 +164,20 @@ public class Projeto
         raf.write(b);
         raf.close();
     }//end descriptografarArquivo
+=======
+            raf.read(b);
+            b = decifrar(b, chave);
+            raf.close();
+            File f = new File(name);
+            f.delete();
+            raf = new RandomAccessFile(name, "rw");
+            raf.write(b);
+            raf.close();
+            System.out.println("Descritografado com sucesso!");
+        }
+        else System.out.println("Não há um arquivo com esse nome!\nA descriptografia não foi realizada!");
+    }
+>>>>>>> 21b4475eb8321dd056c09938b8a02c205dc714e7
 
     //metodo de criptografia em que, a cada byte do texto eh somado um byte da chave
     public static byte[] cifrar(byte[] b, int chave){
